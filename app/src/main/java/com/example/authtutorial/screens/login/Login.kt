@@ -36,7 +36,7 @@ import com.example.authtutorial.network.auth0.AuthorizeResponse
 import com.example.authtutorial.ui.theme.AuthTutorialTheme
 
 @Composable
-fun Login(modifier: Modifier = Modifier, login: (AuthorizeResponse) -> Unit){
+fun Login(login: (AuthorizeResponse) -> Unit, modifier: Modifier = Modifier){
     //passing the login functionality to the VM
     val extras = MutableCreationExtras().apply {
         set(LoginViewModel.LOGIN_KEY, login)
@@ -50,7 +50,7 @@ fun Login(modifier: Modifier = Modifier, login: (AuthorizeResponse) -> Unit){
     val loginState by viewModel.uiState.collectAsState()
     val apiResponseState by viewModel.authResponse.collectAsState()
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(16.dp)) {
         TextField(
             value = loginState.username,
             singleLine = true,
@@ -69,10 +69,10 @@ fun Login(modifier: Modifier = Modifier, login: (AuthorizeResponse) -> Unit){
         )
 
         if(loginState.loginError && apiResponseState is APIResource.Error){
-            errorMessage(apiResponseState)
+            ErrorMessage(apiResponseState)
         }
         Row (Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-            forgotPassword({})
+            ForgotPassword {}
             Button(onClick = { viewModel.onSubmit() }) {
                 if(apiResponseState is APIResource.Loading)
                     Text("loading...")
@@ -87,12 +87,12 @@ fun Login(modifier: Modifier = Modifier, login: (AuthorizeResponse) -> Unit){
 }
 
 @Composable
-fun errorMessage(apiResponse: APIResource<AuthorizeResponse>) {
+fun ErrorMessage(apiResponse: APIResource<AuthorizeResponse>) {
     Text("The combination of username and password is not found." + apiResponse.message)
 }
 
 @Composable
-fun forgotPassword(onClick: () -> Unit) {
+fun ForgotPassword(onClick: () -> Unit) {
     TextButton(
         onClick = { onClick() }
     ) {
@@ -129,7 +129,7 @@ fun PasswordField(value: String, isError: Boolean, onValueChange: (String) -> Un
 
 @Preview(showBackground = true)
 @Composable
-fun loginPreview(){
+fun LoginPreview(){
     AuthTutorialTheme {
         Login(login = {})
     }

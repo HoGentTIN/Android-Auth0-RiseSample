@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-
+import kotlinx.coroutines.withContext
 
 
 interface IAuthRepo {
@@ -28,12 +28,14 @@ class AuthRepo(val authApi: Auth0Api): IAuthRepo{
     override suspend fun getToken(userName: String, password: String) = flow<APIResource<AuthorizeResponse>> {
         val loadingResource = APIResource.Loading<AuthorizeResponse>()
         emit(loadingResource)
-        lateinit var resource: APIResource<AuthorizeResponse>
 
         val call = authApi.getAccessToken(userName = userName, pwd = password)
 
         //converting the call to a flow by executing as a synchronized function
-        val response = call.execute()
+        val response =
+            withContext(Dispatchers.IO) {
+                call.execute()
+            }
 
         if (response.isSuccessful) {
             val token = response.body()
@@ -41,20 +43,19 @@ class AuthRepo(val authApi: Auth0Api): IAuthRepo{
             // Check if the student object is null due to parsing issues
             if (token != null) {
                 Log.d("API", "Token: ${token.access_token}")
-                resource = APIResource.Success<AuthorizeResponse>(token)
+                emit(APIResource.Success<AuthorizeResponse>(token))
             } else {
                 Log.e("API", "Failed to parse token object, response ok")
                 // Fallback: Handle the case when parsing fails
-                resource = APIResource.Error<AuthorizeResponse>("Issue when loggin in." + response.errorBody()?.string())
+                emit(APIResource.Error<AuthorizeResponse>("Issue when loggin in." + response.errorBody()?.string()))
 
             }
         } else {
             Log.e("Error", "API call unsuccessful: ${response.errorBody()?.string()}")
-            resource = APIResource.Error<AuthorizeResponse>("Issue with API call" + response.errorBody()?.string())
+            emit(APIResource.Error<AuthorizeResponse>("Issue with API call" + response.errorBody()?.string()))
         }
 
 
-        emit(resource)
 
 
     }.flowOn(Dispatchers.IO)

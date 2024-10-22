@@ -12,7 +12,7 @@ import com.example.authtutorial.ui.theme.AuthTutorialTheme
 
 @Composable
 fun WelcomeUser(modifier: Modifier = Modifier){
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(16.dp)) {
         Text("Welcome!")
 
     }
@@ -20,7 +20,7 @@ fun WelcomeUser(modifier: Modifier = Modifier){
 
 @Preview(showBackground = true)
 @Composable
-fun welcomeUser(){
+fun WelcomeUserPreview(){
     AuthTutorialTheme {
         WelcomeUser()
     }
