@@ -51,6 +51,7 @@ fun Login(modifier: Modifier = Modifier, login: (AuthorizeResponse) -> Unit){
     val apiResponseState by viewModel.authResponse.collectAsState()
 
     Column(modifier = Modifier.padding(16.dp)) {
+
         TextField(
             value = loginState.username,
             singleLine = true,
@@ -72,7 +73,7 @@ fun Login(modifier: Modifier = Modifier, login: (AuthorizeResponse) -> Unit){
             errorMessage(apiResponseState)
         }
         Row (Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-            forgotPassword({})
+            ForgotPassword()
             Button(onClick = { viewModel.onSubmit() }) {
                 if(apiResponseState is APIResource.Loading)
                     Text("loading...")
@@ -91,14 +92,6 @@ fun errorMessage(apiResponse: APIResource<AuthorizeResponse>) {
     Text("The combination of username and password is not found." + apiResponse.message)
 }
 
-@Composable
-fun forgotPassword(onClick: () -> Unit) {
-    TextButton(
-        onClick = { onClick() }
-    ) {
-        Text("forgot password")
-    }
-}
 
 @Composable
 fun PasswordField(value: String, isError: Boolean, onValueChange: (String) -> Unit, passwordVisible: Boolean, toggleVisible: () -> Unit){
