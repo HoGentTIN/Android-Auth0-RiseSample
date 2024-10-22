@@ -72,7 +72,7 @@ fun Login(login: (AuthorizeResponse) -> Unit, modifier: Modifier = Modifier){
             ErrorMessage(apiResponseState)
         }
         Row (Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-            ForgotPassword {}
+            ForgotPassword()
             Button(onClick = { viewModel.onSubmit() }) {
                 if(apiResponseState is APIResource.Loading)
                     Text("loading...")
@@ -91,14 +91,6 @@ fun ErrorMessage(apiResponse: APIResource<AuthorizeResponse>) {
     Text("The combination of username and password is not found." + apiResponse.message)
 }
 
-@Composable
-fun ForgotPassword(onClick: () -> Unit) {
-    TextButton(
-        onClick = { onClick() }
-    ) {
-        Text("forgot password")
-    }
-}
 
 @Composable
 fun PasswordField(value: String, isError: Boolean, onValueChange: (String) -> Unit, passwordVisible: Boolean, toggleVisible: () -> Unit){

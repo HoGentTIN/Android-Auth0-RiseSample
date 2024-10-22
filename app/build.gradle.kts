@@ -6,16 +6,22 @@ plugins {
 android {
     namespace = "com.example.authtutorial"
     compileSdk = 35
-    //auth callbacks:
-    //demo://dev-387gw3fkqtq50fsu.us.auth0.com/android/com.example.authtutorial/callback
-    //client id: 2SCKy6JXl4cHNsCCugcBAe8jQnY8sLFL
-    //client secret: ***
+
     defaultConfig {
         applicationId = "com.example.authtutorial"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+
+
+        //only for webAuthProvider
+        addManifestPlaceholders(
+            mapOf(
+                "auth0Domain" to "@string/com_auth0_domain",
+                "auth0Scheme" to "@string/com_auth0_scheme"
+            )
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -78,6 +84,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //only for webprovider auth
+    implementation("com.auth0.android:auth0:2.+")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
