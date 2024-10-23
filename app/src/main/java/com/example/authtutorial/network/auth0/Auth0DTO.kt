@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class AuthorizeResponse(
     val access_token: String,
     val expires_in: Int,
-    val token_type: String
-
+    val token_type: String,
+    val refresh_token: String?
 ) {
 
 }
