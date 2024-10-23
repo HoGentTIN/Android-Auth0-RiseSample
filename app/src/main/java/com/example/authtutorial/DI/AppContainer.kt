@@ -4,6 +4,7 @@ import android.content.Context
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.example.authtutorial.network.auth0.Auth0Api
+import com.example.authtutorial.repository.Auth0Repo
 import com.example.authtutorial.repository.AuthRepo
 import com.example.authtutorial.repository.IAuthRepo
 import retrofit2.Retrofit

@@ -1,6 +1,7 @@
 package com.example.authtutorial.repository
 
 import android.util.Log
+import com.auth0.android.result.Credentials
 import com.example.authtutorial.network.auth0.Auth0Api
 import com.example.authtutorial.network.auth0.AuthorizeResponse
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 interface IAuthRepo {
     suspend fun getToken(userName: String, password: String): Flow<APIResource<AuthorizeResponse>>
 
+    suspend fun getCredentials(userName: String, password:String): Flow<APIResource<Credentials>>
 }
 
 
@@ -60,7 +62,12 @@ class AuthRepo(val authApi: Auth0Api): IAuthRepo{
 
     }.flowOn(Dispatchers.IO)
 
-
+    override suspend fun getCredentials(
+        userName: String,
+        password: String
+    ): Flow<APIResource<Credentials>> {
+        TODO("Not yet implemented")
+    }
 
 
 }

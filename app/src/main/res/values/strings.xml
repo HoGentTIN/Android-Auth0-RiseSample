@@ -2,5 +2,5 @@
     <string name="app_name">Auth Tutorial</string>
     <string name="com_auth0_scheme">demo</string>
     <string name="com_auth0_domain">dev-387gw3fkqtq50fsu.us.auth0.com</string>
-
+    <string name="com_auth0_client_id">WQXurnHYdulEysdkLtCp4B5EX7U5znSr</string>
 </resources>

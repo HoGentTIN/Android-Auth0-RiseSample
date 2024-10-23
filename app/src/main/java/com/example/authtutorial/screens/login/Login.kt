@@ -31,12 +31,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.auth0.android.result.Credentials
 import com.example.authtutorial.repository.APIResource
 import com.example.authtutorial.network.auth0.AuthorizeResponse
 import com.example.authtutorial.ui.theme.AuthTutorialTheme
 
 @Composable
-fun Login(login: (AuthorizeResponse) -> Unit, modifier: Modifier = Modifier){
+fun Login(login: (Credentials) -> Unit, modifier: Modifier = Modifier){
     //passing the login functionality to the VM
     val extras = MutableCreationExtras().apply {
         set(LoginViewModel.LOGIN_KEY, login)
@@ -87,7 +88,7 @@ fun Login(login: (AuthorizeResponse) -> Unit, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun ErrorMessage(apiResponse: APIResource<AuthorizeResponse>) {
+fun ErrorMessage(apiResponse: APIResource<Credentials>) {
     Text("The combination of username and password is not found." + apiResponse.message)
 }
 
