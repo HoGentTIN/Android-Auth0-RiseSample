@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.auth0.android.result.Credentials
 import com.example.authtutorial.AuthApplication
 import com.example.authtutorial.repository.APIResource
 import com.example.authtutorial.network.auth0.AuthorizeResponse
@@ -23,7 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class LoginViewModel(val login : (AuthorizeResponse)->Unit, val authRepo: IAuthRepo): ViewModel() {
+class LoginViewModel(val login : (Credentials)->Unit, val authRepo: IAuthRepo): ViewModel() {
     private val _uiState = MutableStateFlow(LoginState())
     val uiState : StateFlow<LoginState> = _uiState.asStateFlow()
 
@@ -36,9 +37,9 @@ class LoginViewModel(val login : (AuthorizeResponse)->Unit, val authRepo: IAuthR
     * Then, in the submit method, the flow is replaced by a new one, that hooks in on the repo
     * */
     private val _authResponse = MutableStateFlow(
-        flow<APIResource<AuthorizeResponse>>{  APIResource.Success(null) })
+        flow<APIResource<Credentials>>{  APIResource.Success(null) })
 
-    val authResponse : StateFlow<APIResource<AuthorizeResponse>> = _authResponse
+    val authResponse : StateFlow<APIResource<Credentials>> = _authResponse
         .flatMapLatest {
             it
         }.onEach{ resource ->
@@ -78,7 +79,7 @@ class LoginViewModel(val login : (AuthorizeResponse)->Unit, val authRepo: IAuthR
     fun onSubmit() {
         //Change the flow to fire the API call
         viewModelScope.launch {
-            _authResponse.value = authRepo.getToken(userName = uiState.value.username, password = uiState.value.password)
+            _authResponse.value = authRepo.getCredentials(userName = uiState.value.username, password = uiState.value.password)
 
         }
 
@@ -91,13 +92,13 @@ class LoginViewModel(val login : (AuthorizeResponse)->Unit, val authRepo: IAuthR
 
     companion object {
         private var Instance: LoginViewModel? = null
-        val LOGIN_KEY = object : CreationExtras.Key<(AuthorizeResponse)->Unit> {}
+        val LOGIN_KEY = object : CreationExtras.Key<(Credentials)->Unit> {}
         val APPLICATION_KEY = object: CreationExtras.Key<Application>{}
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
 
-                var login = this[LOGIN_KEY] as (AuthorizeResponse)->Unit
+                var login = this[LOGIN_KEY] as (Credentials)->Unit
                 val application = this[APPLICATION_KEY] as AuthApplication
                 if (Instance == null) {
 

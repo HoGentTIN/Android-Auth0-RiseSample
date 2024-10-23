@@ -19,9 +19,9 @@ fun App(modifier: Modifier = Modifier) {
 
 
     if(!appState.value.isLoggedIn){
-        Login(login = { authorizeResponse ->
+        Login(login = { credentials ->
             appState.value = appState.value.copy(isLoggedIn = true)
-            Log.i("LOGIN", "App state login with token: " + authorizeResponse.access_token)
+            Log.i("LOGIN", "App state login with token: " + credentials.accessToken)
         }, modifier)
     }
     else{
