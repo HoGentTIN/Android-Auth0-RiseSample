@@ -23,16 +23,20 @@ class Auth0Repo(val authentication: AuthenticationAPIClient): IAuthRepo{
             val loadingResource = APIResource.Loading<AuthorizeResponse>()
             emit(loadingResource)
 
-
             val call = authentication.login(userName, password)
             val response =
                 withContext(Dispatchers.IO) {
-                    call.execute()
+                    try{
+                        call.execute()
+                    }
+                    catch(e: Exception){
+                        //...
+                        null
+                    }
                 }
 
-
             //note: to be refactored so the APIResoucre can contain a Credentials object
-            if(response.accessToken != null){
+            if(response?.accessToken != null){
                 emit(APIResource.Success<AuthorizeResponse>(AuthorizeResponse(access_token = response.accessToken
                     , expires_in = 5000, refresh_token = response.refreshToken,
                     token_type = response.type)))
